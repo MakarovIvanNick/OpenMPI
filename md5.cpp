@@ -83,6 +83,7 @@ int main(int argc, char **argv) {
                                 std::cout << "Runk: " << rank_id << " found the word: " << init << " for time: " << duration <<'\n';
                                 MPI_Abort(MPI_COMM_WORLD, 0);
                             }
+                            //MPI_Bcast(&finished, 1, MPI_INT, 0, MPI_COMM_WORLD);
                         }
                     }
                 }

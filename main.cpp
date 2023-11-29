@@ -2,7 +2,7 @@
 #include "mpi.h"
 #include <chrono>
 
-int size = 4095;
+int size = 2744;//4095;
 void print_matrix (int64_t* matrix) {
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
@@ -47,6 +47,7 @@ void matrixMultAllProc(int64_t* A, int64_t* B, int64_t* res, int chunks) {
 bool is_equal_matrix (int64_t* a, int64_t* b) {
     for (int i = 0; i < size * size; ++i) {
         if (a[i] != b[i]) {
+            std::cout << i << ": " << a[i] << ' ' << b[i] << '\n';
             return false;
         }
     }
@@ -83,16 +84,16 @@ int main(int argc, char **argv) {
         }
         auto end = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-        std::cout << "Executable time 'AllProc': " << duration/1000 << " sec\n";
+        std::cout << "Executable time 'AllProc': " << duration << "\n";
 //        print_matrix(AllProc);
 
-//        start = std::chrono::high_resolution_clock::now();
-//        OneProc = matrixMultOneProc(A, B);
-//        end = std::chrono::high_resolution_clock::now();
-//        duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-//        std::cout << "Executable time 'OneProc': " << duration << '\n';
-////        print_matrix(OneProc);
-//        std::cout << "Matrices are equal: " << is_equal_matrix(AllProc, OneProc) << '\n';
+        start = std::chrono::high_resolution_clock::now();
+        OneProc = matrixMultOneProc(A, B);
+        end = std::chrono::high_resolution_clock::now();
+        duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+        std::cout << "Executable time 'OneProc': " << duration << '\n';
+//        print_matrix(OneProc);
+        std::cout << "Matrices are equal: " << is_equal_matrix(AllProc, OneProc) << '\n';
     } else {
         int src = 0;
         MPI_Recv(&offset, 1, MPI_INT, src, 1, MPI_COMM_WORLD, &status);
